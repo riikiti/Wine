@@ -10,25 +10,24 @@
 
 <script setup>
 import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 
 const file = ref(null);
+const form = useForm({ file: null });
 
 function onFileChange(e) {
   file.value = e.target.files[0];
+  form.file = file.value;
 }
 
 async function handleCsvUpload() {
-  if (!file.value) {
+  if (!form.file) {
     alert('Выберите файл для загрузки.');
     return;
   }
 
-  const formData = new FormData();
-  formData.append('file', file.value);
-
   try {
-    await router.post('/users/import-csv', formData);
+    await form.post('/import/import-csv');
     alert('Файл успешно загружен и обработан!');
   } catch (error) {
     alert('Ошибка при загрузке файла.');
