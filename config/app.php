@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'chunk_size'=> env('APP_CHUNK_SIZE', 100),
+
 ];

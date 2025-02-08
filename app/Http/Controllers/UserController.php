@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Csv\ParseCsvWineFavoritesUsersAction;
+use App\Actions\Import\ImportCsvWineFavoritesUsersAction;
 use App\Http\Requests\ImportRequest;
 use App\Models\User;
 use App\Models\Wine;
@@ -15,7 +15,7 @@ use League\Csv\Reader;
 
 class UserController extends Controller
 {
-    public function importCsv(ImportRequest $request,ParseCsvWineFavoritesUsersAction $action): void
+    public function importCsv(ImportRequest $request,ImportCsvWineFavoritesUsersAction $action): void
     {
        $action->importCsv($request);
     }

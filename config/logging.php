@@ -126,7 +126,11 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
-
+        'importcsv' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/import_wine.log'),
+            'level' => env('LOG_LEVEL', 'debug')
+        ],
     ],
 
 ];
