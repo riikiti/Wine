@@ -17,6 +17,9 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'regex:/^\+7\d{10}$/', 'unique:users,phone,' . $this->user()->id],
+            'birth_date' => ['required', 'date_format:Y-m-d'],
+            'address' => ['nullable', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',

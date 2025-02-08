@@ -22,7 +22,7 @@ class ImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|mimes:csv,txt',
+            'file' => 'required|file|mimes:csv,txt|max:2048',
         ];
     }
 }
