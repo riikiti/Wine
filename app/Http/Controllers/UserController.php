@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Wine;
 use Illuminate\Http\Request;
@@ -9,7 +11,7 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(): \Inertia\Response
     {
         $users = User::with('wines')->get();
         $wines = Wine::query()->get();
@@ -19,32 +21,16 @@ class UserController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): \Inertia\Response
     {
         return Inertia::render('Users/Create');
     }
 
-    public function store(Request $request)
+    public function store(RegisterRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|unique:users,phone',
-            'birth_date' => 'nullable|date',
-            'address' => 'nullable|string',
-            'email' => 'nullable|unique:users,email|email',
-            'password' => 'nullable|string|min:6',
-            'wine_ids' => 'array',
-            'wine_ids.*' => 'exists:wines,id',
-        ]);
+        $data = $request->validated();
 
-        $user = User::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'birth_date' => $request->birth_date,
-            'address' => $request->address,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+        $user = User::create($data);
 
         $user->wines()->sync($request->wine_ids);
 
@@ -52,32 +38,15 @@ class UserController extends Controller
     }
 
 
-    public function edit(User $user)
+    public function edit(User $user): \Inertia\Response
     {
         return Inertia::render('Users/Edit', ['user' => $user]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): \Illuminate\Http\RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|unique:users,phone,' . $user->id,
-            'birth_date' => 'nullable|date',
-            'address' => 'nullable|string',
-            'email' => 'nullable|unique:users,email,' . $user->id . '|email',
-            'password' => 'nullable|string|min:6',
-            'wine_ids' => 'array',
-            'wine_ids.*' => 'exists:wines,id',
-        ]);
-
-        $user->update([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'birth_date' => $request->birth_date,
-            'address' => $request->address,
-            'email' => $request->email,
-            'password' => $request->password ? bcrypt($request->password) : $user->password,
-        ]);
+        $data = $request->validated();
+        $user->fill($data)->save();
 
         $user->wines()->sync($request->wine_ids);
 
@@ -85,7 +54,7 @@ class UserController extends Controller
     }
 
 
-    public function destroy(User $user)
+    public function destroy(User $user): \Illuminate\Http\RedirectResponse
     {
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully!');

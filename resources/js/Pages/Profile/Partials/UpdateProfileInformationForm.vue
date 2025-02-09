@@ -75,11 +75,9 @@ const setupPhoneMask = (el) => {
       </div>
       <div>
         <InputLabel for="birth_date" value="Birth Date" />
-        <DatePicker
-            v-model="form.birth_date"
-            format="YYYY-MM-DD"
-            input-class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-        />
+        <div class="mb-4">
+          <input v-model="form.birth_date" id="birth_date" type="date" class="border border-gray-300 rounded w-full p-2" />
+        </div>
         <InputError class="mt-2" :message="form.errors.birth_date" />
       </div>
       <div>

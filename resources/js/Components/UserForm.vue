@@ -1,27 +1,28 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <div class="mb-4">
-      <label for="name" class="block text-sm font-medium">Имя:</label>
+      <InputLabel for="name" value="Имя:"/>
       <input v-model="localUser.name" id="name" type="text" class="border border-gray-300 rounded w-full p-2" required />
     </div>
 
     <div class="mb-4">
-      <label for="phone" class="block text-sm font-medium">Телефон:</label>
+      <InputLabel for="phone" value="Телефон:"/>
       <input v-model="localUser.phone" id="phone" type="text" class="border border-gray-300 rounded w-full p-2" />
     </div>
 
     <div class="mb-4">
-      <label for="address" class="block text-sm font-medium">Адрес:</label>
+      <InputLabel for="address" value="Адрес:"/>
       <input v-model="localUser.address" id="address" type="text" class="border border-gray-300 rounded w-full p-2" />
     </div>
 
     <div class="mb-4">
-      <label for="birthdate" class="block text-sm font-medium">Дата рождения:</label>
+      <InputLabel for="birthdate" value="Дата рождения:"/>
       <input v-model="localUser.birth_date" id="birthdate" type="date" class="border border-gray-300 rounded w-full p-2" />
     </div>
 
+
     <div class="mb-4 relative">
-      <label class="block text-sm font-medium mb-1">Вина:</label>
+      <InputLabel for="wines" value="Вина:"/>
       <div @click="toggleDropdown" class="border border-gray-300 rounded w-full p-2 cursor-pointer">
         {{ selectedWines.length > 0 ? selectedWinesNames : 'Выберите вина' }}
       </div>
@@ -45,14 +46,17 @@
 </template>
 
 <script>
+import InputLabel from "@/Components/InputLabel.vue";
+
 export default {
+  components: { InputLabel },
   props: {
     user: Object,
     availableWines: Array,
   },
   data() {
     return {
-      localUser: { ...this.user },
+      localUser: { ...this.user, password: '' },
       selectedWines: this.user.wines ? this.user.wines.map(wine => wine.id) : [],
       dropdownOpen: false,
     };
@@ -79,10 +83,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* Опциональный стиль для плавного скролла */
-.max-h-40 {
-  max-height: 10rem;
-}
-</style>
