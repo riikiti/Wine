@@ -23,11 +23,9 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|unique:users,phone',
+            'phone' => 'nullable|string|max:50',
+            'address' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date',
-            'address' => 'nullable|string',
-            'email' => 'nullable|unique:users,email',
-            'password' => 'nullable|string|min:6',
             'wine_ids' => 'array',
             'wine_ids.*' => 'exists:wines,id',
         ];

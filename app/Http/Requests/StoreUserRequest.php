@@ -23,8 +23,8 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|unique:users,phone',
-            'birth_date' => 'nullable|date',
+            'phone' => 'required | regex:/^\+7\d{10}$/ | unique:users,phone',
+            'birth_date' => 'required|date_format:Y-m-d',
             'address' => 'nullable|string',
             'email' => 'nullable|unique:users,email|email',
             'password' => 'nullable|string|min:6',
