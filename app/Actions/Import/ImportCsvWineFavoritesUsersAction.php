@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use League\Csv\Reader;
 
-class ImportCsvWineFavoritesUsersAction extends ImportCsvAction
+final class ImportCsvWineFavoritesUsersAction extends ImportCsvAction
 {
-
     private function setParams(array $record): array
     {
         $newRecord['name'] = trim($record['ФИО']);
@@ -22,7 +21,6 @@ class ImportCsvWineFavoritesUsersAction extends ImportCsvAction
 
         return $newRecord;
     }
-
     public function importCsv(ImportRequest $request)
     {
         $records = $this->getRecords($request);
@@ -32,7 +30,7 @@ class ImportCsvWineFavoritesUsersAction extends ImportCsvAction
             foreach ($records as $index => $record) {
                 $newRecord = $this->setParams($record);
                 if (empty($newRecord['name']) || empty($newRecord['birth_date'])) {
-                    $this->warnings[] = "Пропущены обязательные поля для записи: " . $newRecord['name'] . "(строка {$index}).";
+                    $warnings[] = "Пропущены обязательные поля для записи: " . $newRecord['name'] . "(строка {$index}).";
                     continue;
                 }
                 $existingUser = User::where('phone', $newRecord['phone'])->first();
@@ -70,7 +68,6 @@ class ImportCsvWineFavoritesUsersAction extends ImportCsvAction
             return back()->withErrors(['file' => 'Ошибка при обработке файла: ' . $e->getMessage()]);
         }
     }
-
     private function processBatch(array $batchData, array &$warnings): void
     {
         foreach ($batchData as $data) {

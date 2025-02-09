@@ -28,15 +28,4 @@ class ImportCsvAction
 
         return $csv->getRecords();
     }
-    private function setParams(array $record): array
-    {
-        return [];
-    }
-    private function processBatch(array $batchData) : void
-    {
-    }
-    private function attachFavoriteWines(User $user, array $favoriteWines): void
-    {
-
-    }
 }

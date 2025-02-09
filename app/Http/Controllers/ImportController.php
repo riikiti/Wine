@@ -12,9 +12,18 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use League\Csv\Reader;
-
+/**
+ * @tags Ипорт пользоватлей и вин
+ *
+ */
 class ImportController extends Controller
 {
+    /**
+     * Создание обратной связи
+     *
+     * @param ImportRequest $request
+     * @param ImportCsvWineFavoritesUsersAction $action
+     */
     public function importCsv(ImportRequest $request,ImportCsvWineFavoritesUsersAction $action): void
     {
        $action->importCsv($request);

@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Query\Builder;
+/**
+ * @method static Builder|User query()
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $phoned
+ * @property string $birth_date
+ * @property string $address
+ */
 
 class User extends Authenticatable
 {
