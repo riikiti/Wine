@@ -1,6 +1,5 @@
 <template>
   <Head title="Users"/>
-
   <AuthenticatedLayout>
     <template #header>
       <h2 class="text-xl font-semibold leading-tight text-gray-800">
@@ -16,20 +15,18 @@
       <UserTable :users="users" @edit="openEditModal" @delete="deleteUser"/>
 
       <Modal :visible="isModalOpen" @close="closeModal">
-        <UserForm :user="modalUser" :availableWines="wines" @submit="saveUser" @close="closeModal"/>
+        <UserForm :user="modalUser" :availableWines="wines" :errors="validationErrors" @submit="saveUser" @close="closeModal"/>
       </Modal>
-
     </div>
   </AuthenticatedLayout>
 </template>
 
 <script>
-import {Head} from '@inertiajs/vue3';
+import {Head, router} from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import UserTable from '@/Components/UserTable.vue';
 import Modal from '@/Components/Modal.vue';
 import UserForm from '@/Components/UserForm.vue';
-import {router} from '@inertiajs/vue3';
 
 export default {
   components: {Head, AuthenticatedLayout, UserTable, Modal, UserForm},
@@ -38,34 +35,42 @@ export default {
     return {
       isModalOpen: false,
       modalUser: null,
+      validationErrors: {},
     };
   },
   methods: {
     openCreateModal() {
-      this.modalUser = {id: null, name: '', phone: ''};
+      this.modalUser = null;
       this.isModalOpen = true;
+      this.validationErrors = {};
     },
     openEditModal(user) {
-      this.modalUser = {...user};
+      this.modalUser = JSON.parse(JSON.stringify(user));
       this.isModalOpen = true;
+      this.validationErrors = {};
     },
     closeModal() {
       this.isModalOpen = false;
+      this.modalUser = null;
+      this.validationErrors = {};
     },
     saveUser(user) {
-      if (user.id) {
-        router.put(`/users/${user.id}`, user);
-      } else {
-        router.post('/users', user);
-      }
-      this.closeModal();
+      this.validationErrors = {};
+      const request = user.id
+          ? router.put(`/users/${user.id}`, { ...user, wines: user.wine_ids })
+          : router.post('/users', user);
+
+      request.then(() => {
+        alert(`Пользователь ${user.id ? 'обновлен' : 'создан'} успешно!`);
+        this.closeModal();
+      }).catch(error => {
+        if (error.response && error.response.status === 422) {
+          this.validationErrors = error.response.data.errors;
+        } else {
+          console.error("Ошибка сохранения пользователя", error);
+        }
+      });
     },
-    deleteUser(id) {
-      if (confirm('Вы уверены, что хотите удалить этого пользователя?')) {
-        router.delete(`/users/${id}`);
-      }
-    },
-  },
+  }
 };
 </script>
-

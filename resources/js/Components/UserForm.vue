@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <div class="mb-4">
-      <InputLabel for="name" value="Имя:"/>
+      <InputLabel for="name" value="Имя:" />
       <input v-model="localUser.name" id="name" type="text" class="border border-gray-300 rounded w-full p-2" required />
     </div>
 
@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       localUser: { ...this.user, password: '' },
-      selectedWines: this.user.wines ? this.user.wines.map(wine => wine.id) : [],
+      selectedWines: Array.isArray(this.user?.wines) ? this.user.wines.map(wine => wine.id) : [],
       dropdownOpen: false,
     };
   },
