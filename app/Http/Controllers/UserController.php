@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Wine;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,7 +12,11 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('wines')->get();
-        return Inertia::render('Users/Index', ['users' => $users]);
+        $wines = Wine::query()->get();
+        return Inertia::render('Users/Index', [
+            'wines' => $wines,
+            'users' => $users,
+        ]);
     }
 
     public function create()
@@ -28,9 +33,11 @@ class UserController extends Controller
             'address' => 'nullable|string',
             'email' => 'nullable|unique:users,email|email',
             'password' => 'nullable|string|min:6',
+            'wine_ids' => 'array',
+            'wine_ids.*' => 'exists:wines,id',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'phone' => $request->phone,
             'birth_date' => $request->birth_date,
@@ -39,8 +46,11 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
+        $user->wines()->sync($request->wine_ids);
+
         return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
+
 
     public function edit(User $user)
     {
@@ -56,6 +66,8 @@ class UserController extends Controller
             'address' => 'nullable|string',
             'email' => 'nullable|unique:users,email,' . $user->id . '|email',
             'password' => 'nullable|string|min:6',
+            'wine_ids' => 'array',
+            'wine_ids.*' => 'exists:wines,id',
         ]);
 
         $user->update([
@@ -67,8 +79,11 @@ class UserController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]);
 
+        $user->wines()->sync($request->wine_ids);
+
         return redirect()->route('users.index')->with('success', 'User updated successfully!');
     }
+
 
     public function destroy(User $user)
     {
