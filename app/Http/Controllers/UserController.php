@@ -37,7 +37,7 @@ class UserController extends Controller
         return Inertia::render('Users/Create');
     }
 
-    public function store(RegisterRequest $request, UserStoreUserAction $action): \Illuminate\Http\RedirectResponse
+    public function store(UpdateUserRequest $request, UserStoreUserAction $action): \Illuminate\Http\RedirectResponse
     {
         $action->execute($request);
         return redirect()->route('users.index')->with('success', 'User created successfully!');

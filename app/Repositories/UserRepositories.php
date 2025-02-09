@@ -14,7 +14,7 @@ class UserRepositories
         return User::with('wines')->get();
     }
 
-    public function store(RegisterRequest $request)
+    public function store(UpdateUserRequest $request)
     {
         $data = $request->validated();
         return User::create($data);
