@@ -24,3 +24,8 @@
 -  down `docker-compose down`
 -  run migration `docker-compose exec app php artisan migrate --force`
 -  host http://localhost:8000
+
+### На всякий случай 
+
+- выполнить `docker-compose exec app php artisan migrate --force`
+- а так же `docker-compose exec app bash` а потом `npm i`
