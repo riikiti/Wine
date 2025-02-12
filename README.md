@@ -17,3 +17,9 @@
 ## Crud
 
 простой Crud, не сделана валидация для фронта в формах создания и редактирвоания (todo)
+
+## Docker 
+
+-  build `docker-compose up -d --build`
+-  run migration `docker-compose exec app php artisan migrate`
+-  host http://localhost:8000
